@@ -1,292 +1,140 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <regex>
+#include <sstream>
+#include <vector>
+#include <stdio.h>
+#include <ctype.h>
+#include <bits/stdc++.h>
+
+#define set(x, y) (x | (1 << y))
+#define reset(x, y) (x & ~(1 << y))
+
 using namespace std;
 
-int main () {
-  string line;
-  ifstream in ("in.s");
-  ofstream out;
+// for string delimiter
+vector<string> split(string s, string delimiter)
+{
+	size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+	string token;
+	vector<string> res;
 
-  regex add1("(add r(\\d), r(\\d), #(.*))");
-  regex add2("(add r(\\d), #(.*))");
-  regex add3("(add r(\\d), r(\\d), r[0-9])");
-  regex add4("(add r(\\d), pc)");
-  regex add5("(add r(\\d), sp)");
-  regex add6("(add sp, #(.*))");
+	while ((pos_end = s.find(delimiter, pos_start)) != string::npos)
+	{
+		token = s.substr(pos_start, pos_end - pos_start);
+		pos_start = pos_end + delim_len;
+		res.push_back(token);
+	}
 
-  regex _and("(and r(\\d), r(\\d))");
+	res.push_back(s.substr(pos_start));
+	return res;
+}
 
-  regex asr1("(asr r(\\d), r(\\d), #(.*))");
-  regex asr2("(asr r(\\d), r(\\d))");
+int main()
+{
+	string line;
+	ifstream in("in.s");
+	ofstream out;
 
-  regex b("(b \\.\\w)");
-  regex _b("(b .\\s)");
-  regex bne("(bne (.*))");
-  regex beq("(beq (.*))");
-  regex bgt("(bgt (.*))");
-  regex blt("(blt (.*))");
-  regex bge("(bge (.*))");
-  regex ble("(ble (.*))");
+	short valor = 0;
 
-  regex bic("(bic (.*))");
+	if (in.is_open())
+	{
+		while (getline(in, line))
+		{
+			transform(line.begin(), line.end(), line.begin(), ::toupper); //tranforma tudo em maiúscula
+			vector<string> inst = split(line, " ");
+			out.open("out.txt");
+			if (inst[0] == "MOV")
+			{
+				if (inst[1][0] == 'R')
+				{
+					if (inst[2][0] == '#')
+					{   //identificou a instrução MOV da 5º linha da tabela
+						//colocando o valor imediato no short(16 bits) nos 7 primeiros bitis, como diz  tabela
+						inst[2][0] = '0';
+						istringstream(inst[2]) >> valor;
+						valor &= 0b0000000001111111;
 
-  regex bl("(bl (.*))");
-  
-  regex bx("(bx (.*))");
+						//colocando o numero do registrador nos bits(8..10)
+						int reg = 0;
+						reg = inst[1][1] - 48;
+						valor |= reg << 8;
+						valor &= 0b0000001111111111;
 
-  regex cmn("(cmn r(\\d), r(\\d))");
+						//colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
+						valor |= 0b00100 << 11;
+						printf("%x\n", valor);
+						out << valor << "\n";
+					}
+				}
+			}
+			else if (inst[0] == "CMP")
+			{
+				if (inst[1][0] == 'R')
+				{
+					if (inst[2][0] == '#')
+					{
+						inst[2][0] = '0';
+						istringstream(inst[2]) >> valor;
+						valor &= 0b0000000001111111;
 
-  regex cmp1("(cmp r(\\d), #(.*))");
-  regex cmp2("(cmp r(\\d), r(\\d))");
+						int reg = 0;
+						reg = inst[1][1] - 48;
+						valor |= reg << 8;
+						valor &= 0b0000001111111111;
 
-  regex eor("(eor r(\\d), r(\\d))");
-  
-  regex ldmia("(ldmia r(\\d)!)");
+						valor |= 0b00101 << 11;
+						printf("%x\n", valor);
+						out << valor << "\n";
+					}
+				}
+			}
+			else if (inst[0] == "ADD")
+			{
+				if (inst[1][0] == 'R')
+				{
+					if (inst[2][0] == '#')
+					{
+						inst[2][0] = '0';
+						istringstream(inst[2]) >> valor;
+						valor &= 0b0000000001111111;
 
+						int reg = 0;
+						reg = inst[1][1] - 48;
+						valor |= reg << 8;
+						valor &= 0b0000001111111111;
 
-  regex ldr1("(ldr r(\\d), (\\[)r(\\d), #(.*))");
-  regex ldr2("(ldr r(\\d), (\\[)r(\\d), r(\\d))");
-  regex ldr3("(ldr r(\\d), (\\[)pc, #(.*))");
-  regex ldr4("(ldr r(\\d), (\\[)sp, #(.*))");
+						valor |= 0b00110 << 11;
+						printf("%x\n", valor);
+						out << valor << "\n";
+					}
+				}
+			}
+			else if (inst[0] == "SUB")
+			{
+				if (inst[1][0] == 'R')
+				{
+					if (inst[2][0] == '#')
+					{
+						inst[2][0] = '0';
+						istringstream(inst[2]) >> valor;
+						valor &= 0b0000000001111111;
 
-  regex lsl1("(lsl r(\\d), r(\\d), #(.*))");
-  regex lsl2("(lsl r(\\d), r(\\d))");
-  
-  regex lsr1("(lsl r(\\d), r(\\d), #(.*))");
-  regex lsr2("(lsl r(\\d), r(\\d))");
+						int reg = 0;
+						reg = inst[1][1] - 48;
+						valor |= reg << 8;
+						valor &= 0b0000001111111111;
 
-  regex mov1("(mov r(\\d), #(.*))");
-  regex mov2("(mov r(\\d), r(\\d))");
+						valor |= 0b00111 << 11;
+						printf("%x\n", valor);
+						out << valor << "\n";
+					}
+				}
+			}
+		}
+	}
 
+	out.close();
+	in.close();
 
-  regex mul("(mul r(\\d), r(\\d))");
-
-  regex mvn("(mvn r(\\d), r(\\d))");
-  
-  regex neg("(neg r(\\d), r(\\d))");
-  
-  regex orr("(orr r(\\d), r(\\d))");
-  
-  regex pop("(pop (.*))");
-  
-  regex push("(push (.*))");
-
-  regex ror("(ror r(\\d), r(\\d))");
-  
-  regex sbc("(sbc r(\\d), r(\\d))");
-  
-  regex sub1("(sub r(\\d), r(\\d), #(.*))");
-  regex sub2("(sub r(\\d), #(.*))");
-  regex sub3("(sub r(\\d), r(\\d), r(\\d))");
-  regex sub4("(sub sp, #(.*))");
-  regex sub5("(sub r(\\d), r(\\d))");
-  
-  regex swi("(swi (.*))");
-  regex tst("(tst r[0-9], r[0-9])");
-
-  smatch m;
-
-  if(in.is_open())
-  {
-    out.open("out.txt");
-    while ( getline (in,line) )
-    {
-        if(regex_search(line, m, add1))
-        {
-            out << "add1\n";  
-        }
-        if(regex_search(line, m, add2))
-        {
-            out << "add2\n";  
-        }
-        if(regex_search(line, m, add3))
-        {
-            out << "add3\n";  
-        }
-        if(regex_search(line, m, add4))
-        {
-            out << "add4\n";  
-        }
-        if(regex_search(line, m, add5))
-        {
-            out << "add5\n";  
-        }
-        if(regex_search(line, m, add6))
-        {
-            out << "add6\n";  
-        }
-        if(regex_search(line, m, _and))
-        {
-            out << "and\n";  
-        }
-        if(regex_search(line, m, b))
-        {
-            out << "b1\n";  
-        }
-        if(regex_search(line, m, _b))
-        {
-            out << "b2\n";  
-        }
-        if(regex_search(line, m, bne))
-        {
-            out << "bne\n";  
-        }
-        if(regex_search(line, m, beq))
-        {
-            out << "beq\n";  
-        }
-        if(regex_search(line, m, bgt))
-        {
-            out << "bgt\n";  
-        }
-        if(regex_search(line, m, blt))
-        {
-            out << "blt\n";  
-        }
-        if(regex_search(line, m, bge))
-        {
-            out << "bge\n";  
-        }
-        if(regex_search(line, m, bic))
-        {
-            out << "bic\n";  
-        }
-        if(regex_search(line, m, bl))
-        {
-            out << "bl\n";  
-        }
-        if(regex_search(line, m, bx))
-        {
-            out << "bx\n";  
-        }
-        if(regex_search(line, m, cmn))
-        {
-            out << "cmn\n";  
-        }
-        if(regex_search(line, m, cmp1))
-        {
-            out << "cmp1\n";  
-        }
-        if(regex_search(line, m, cmp2))
-        {
-            out << "cmp2\n";  
-        }
-        if(regex_search(line, m, eor))
-        {
-            out << "eor\n";  
-        }
-        if(regex_search(line, m, ldmia))
-        {
-            out << "ldmia\n";  
-        }
-        if(regex_search(line, m, ldr1))
-        {
-            out << "ldr1\n";  
-        }
-        if(regex_search(line, m, ldr2))
-        {
-            out << "ldr2\n";  
-        }
-        if(regex_search(line, m, ldr3))
-        {
-            out << "ldr3\n";  
-        }
-        if(regex_search(line, m, ldr4))
-        {
-            out << "ldr4\n";  
-        }
-        if(regex_search(line, m, lsl1))
-        {
-            out << "lsl1\n";  
-        }
-        if(regex_search(line, m, lsl2))
-        {
-            out << "lsl2\n";  
-        }
-        if(regex_search(line, m, lsr1))
-        {
-            out << "lsr1\n";  
-        }
-        if(regex_search(line, m, lsr2))
-        {
-            out << "lsr2\n";  
-        }
-        if(regex_search(line, m, mov1))
-        {
-            out << "mov1\n";  
-        }
-        if(regex_search(line, m, mov2))
-        {
-            out << "mov2\n";  
-        }
-        if(regex_search(line, m, mul))
-        {
-            out << "mul\n";  
-        }
-        if(regex_search(line, m, mvn))
-        {
-            out << "mvn\n";  
-        }
-        if(regex_search(line, m, neg))
-        {
-            out << "neg\n";  
-        }
-        if(regex_search(line, m, orr))
-        {
-            out << "orr\n";  
-        }
-        if(regex_search(line, m, pop))
-        {
-            out << "pop\n";  
-        }
-        if(regex_search(line, m, push))
-        {
-            out << "push\n";  
-        }
-        if(regex_search(line, m, ror))
-        {
-            out << "ror\n";  
-        }
-        if(regex_search(line, m, sbc))
-        {
-            out << "sbc\n";  
-        }
-        if(regex_search(line, m, sub1))
-        {
-            out << "sub1\n";  
-        }
-        if(regex_search(line, m, sub2))
-        {
-            out << "sub2\n";  
-        }
-        if(regex_search(line, m, sub3))
-        {
-            out << "sub3\n";  
-        }
-        if(regex_search(line, m, sub4))
-        {
-            out << "sub4\n";  
-        }
-        if(regex_search(line, m, sub5))
-        {
-            out << "sub5\n";  
-        }
-        if(regex_search(line, m, swi))
-        {
-            out << "swi\n";  
-        }
-        if(regex_search(line, m, tst))
-        {
-            out << "tst\n";  
-        }
-    }
-    out.close();
-    in.close();
-  }
-
-  else cout << "Unable to open file"; 
-
-  return 0;
+	return 0;
 }

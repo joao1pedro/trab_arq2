@@ -1,5 +1,5 @@
 CC:= g++
-CPPFLAGS = -Wall -std=c++14 -g -Werror
+CPPFLAGS = -Wall -std=c++17 -g -Werror
 
 all: app
 

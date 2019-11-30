@@ -1,12 +1,9 @@
-mov r3, #0
-.loop:
-    add r3, #1
-    sub r0, r1
-    ldr r0, [r1, #800800]
-    bge .loop
-    add r0, r3, #0x8000f
-    sub r3, #1
-b .label
-    add r2, r0, r1
-    add r2, r1, #100
-    b . 
+add r0, r1
+mov r2, #7
+cmp r0, #90
+feijjofe
+odjoocjo
+dojjcdoj
+add r0, #1
+eifnkfn
+sub r1, #2
