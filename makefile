@@ -1,12 +1,10 @@
-CC:= gcc
+CC:= g++
+CPPFLAGS = -Wall -std=c++14 -g -Werror
 
-all: app_link
+all: app
 
 app:
-	$(CC) -c decode.c
-
-app_link: app
-	$(CC) -o decode decode.o
+	$(CC) $(CPPFLAGS) decode.cpp -o decode
 
 clean:
-	@rm decode decode.o
+	rm -f decode out.txt

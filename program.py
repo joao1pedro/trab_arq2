@@ -1,79 +1,79 @@
 import re
 
-add1 = 'add r\w, r\w, #\w'
-add2 = 'add r\w, #\w'
-add3 = 'add r\w, r\w, r\w'
-add4 = 'add r\w, pc'
-add5 = 'add r\w, sp'
-add6 = 'add sp, #w'
+add1 = 'add r\d, r\d, #\d'
+add2 = 'add r\d, #\d'
+add3 = 'add r\d, r\d, r\d'
+add4 = 'add r\d, pc'
+add5 = 'add r\d, sp'
+add6 = 'add sp, #\d'
 
-_and = 'and r\w, r\w'
+_and = 'and r\d, r\d'
 
-adr1 = 'asr r\w, r\w, #\w'
-adr2 = 'asr r\w, r\w'
+adr1 = 'asr r\d, r\d, #\d'
+adr2 = 'asr r\d, r\d'
 
 b = 'b _'
-bne = 'bne \w'
-beq = 'beq \w'
-bgt = 'bgt \w'
-blt = 'blt \w'
-bge = 'bge \w'
-ble = 'ble \w'
+bne = 'bne \d'
+beq = 'beq \d'
+bgt = 'bgt \d'
+blt = 'blt \d'
+bge = 'bge \d'
+ble = 'ble \d'
 
-bic = 'bic r\w, r\w'
+bic = 'bic r\d, r\d'
 
-bl = 'bl \w'
+bl = 'bl \d'
 
-bx = 'bx \w'
+bx = 'bx \d'
 
-cmn = 'cmn r\w, r\w'
+cmn = 'cmn r\d, r\d'
 
-cmp1 = 'cmp r\w, #\w'
-cmp2 = 'cmp r\w, r\w'
+cmp1 = 'cmp r\d, #\d'
+cmp2 = 'cmp r\d, r\d'
 
-eor = 'eor r\w, r\w'
+eor = 'eor r\d, r\d'
 
-ldmia = 'ldmia r\w!'
+ldmia = 'ldmia r\d!'
 
-_ldr1 = 'ldr r\w, [r\w, #'
-_ldr2 = 'ldr r\w, [r\w, r\w]'
-_ldr3 = 'ldr r\w, [pc, #'
-_ldr4 = 'ldr r\w, [sp, #'
+_ldr1 = 'ldr r\d, [r\d, #'
+_ldr2 = 'ldr r\d, [r\d, r\d]'
+_ldr3 = 'ldr r\d, [pc, #'
+_ldr4 = 'ldr r\d, [sp, #'
 
-lsl1 = 'lsl r\w, r\w, #\w'
-lsl2 = 'lsl r\w, r\w'
+lsl1 = 'lsl r\d, r\d, #\d'
+lsl2 = 'lsl r\d, r\d'
 
-lsr1 = 'lsr r\w, r\w, #\w'
-lsr2 = 'lsr r\w, r\w'
+lsr1 = 'lsr r\d, r\d, #\d'
+lsr2 = 'lsr r\d, r\d'
 
-mov1 = 'mov r\w, #\w'
-mov2 = 'mov r\w, r\w'
+mov1 = 'mov r\d, #\d'
+mov2 = 'mov r\d, r\d'
 
-mul = 'mul r\w, r\w'
+mul = 'mul r\d, r\d'
 
-mvn = 'mvn r\w, r\w'
+mvn = 'mvn r\d, r\d'
 
-neg = 'neg r\w, r\w'
+neg = 'neg r\d, r\d'
 
-orr = 'orr r\w, r\w'
+orr = 'orr r\d, r\d'
 
-pop = 'pop \w'
+pop = 'pop \d'
 
-push = 'push \w'
+push = 'push \d'
 
-ror = 'ror r\w, r\w'
+ror = 'ror r\d, r\d'
 
-sbc = 'sbc r\w, r\w'
+sbc = 'sbc r\d, r\d'
 
-sub1 = 'sub r\w, r\w, #\w'
-sub2 = 'sub r\w, #\w'
-sub3 = 'sub r\w, r\w, r\w'
-sub4 = 'sub sp, #\w'
-sub5 = 'sub r\w, r\w'
+sub1 = 'sub r\d, r\d, #\d'
+sub2 = 'sub r\d, #\d'
+sub3 = 'sub r\d, r\d, r\d'
+sub4 = 'sub sp, #\d'
+sub5 = 'sub r\d, r\d'
 
-swi = 'swi \w'
+swi = 'swi \d'
 
-tst = 'tst r\w, r\w'
+tst = 'tst r\d, r\d'
 
 arquivo = open('in.s','r')
 contador = 0
