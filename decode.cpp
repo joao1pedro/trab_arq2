@@ -84,6 +84,20 @@ void decode(void)
                         valor |= 0b00101 << 11;
                         printf("%x\n", valor);
                     }
+                    else if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        valor |= 0b010001010 << 6;
+                        printf("%x\n", valor);
+                    }
                 }
             }
             else if (inst[0] == "ADD") //linha 6
@@ -105,6 +119,20 @@ void decode(void)
                         printf("%x\n", valor);
                     }
                 }
+                else if (inst[1][0] == 'S')
+                {
+                    if (inst[2][0] == '#')
+                    { //identificou a instrução MOV da 5º linha da tabela
+                        //colocando o valor imediato no short(16 bits) nos 7 primeiros bitis, como diz  tabela
+                        inst[2][0] = '0';
+                        istringstream(inst[2]) >> valor;
+                        valor &= 0b00111111;
+
+                        //colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
+                        valor |= 0b101100000 << 7;
+                        printf("%x\n", valor);
+                    }
+                }
             }
             else if (inst[0] == "SUB") //linha 6
             {
@@ -122,6 +150,18 @@ void decode(void)
                         valor &= 0b0000001111111111;
 
                         valor |= 0b00111 << 11;
+                        printf("%x\n", valor);
+                    }
+                }
+                else if (inst[1][0] == 'S')
+                {
+                    if (inst[2][0] == '#')
+                    {
+                        inst[2][0] = '0';
+                        istringstream(inst[2]) >> valor;
+                        valor &= 0b00111111;
+
+                        valor |= 0b101100001 << 7;
                         printf("%x\n", valor);
                     }
                 }
@@ -167,12 +207,12 @@ void decode(void)
                             ///rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -197,12 +237,12 @@ void decode(void)
                             ///rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -227,12 +267,12 @@ void decode(void)
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -240,6 +280,27 @@ void decode(void)
                             valor &= 0b001111000000;
 
                             valor |= 0b01100 << 11;
+                            printf("%x\n", valor);
+                        }
+                        else if (inst[3][0] == 'R')
+                        {
+                            int reg1 = 0;
+                            reg1 = inst[1][1] - 48;
+                            valor |= reg1 << 0;
+                            valor &= 0b0000000000000111;
+
+                            int reg2 = 0;
+                            reg2 = inst[2][1] - 48;
+                            valor |= reg2 << 3;
+                            valor &= 0b0000000000111111;
+
+                            int reg3 = 0;
+                            reg3 = inst[3][1] - 48;
+                            valor |= reg3 << 6;
+                            valor &= 0b0000000111111111;
+
+                            //colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
+                            valor |= 0b0101000 << 9;
                             printf("%x\n", valor);
                         }
                     }
@@ -250,18 +311,18 @@ void decode(void)
                 if (inst[1][0] == 'R')
                 {
                     if (inst[2][0] == 'R')
-                    { //identificou a instrução ASR da 5º linha da tabela
+                    {
                         if (inst[3][0] == '#')
                         {
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -269,6 +330,23 @@ void decode(void)
                             valor &= 0b001111000000;
 
                             valor |= 0b01101 << 11;
+                            printf("%x\n", valor);
+                        }
+                    }
+                    else if (inst[2][0] == 'P')
+                    {
+                        if (inst[3][0] == '#')
+                        {
+                            inst[2][0] = '0';
+                            istringstream(inst[2]) >> valor;
+                            valor &= 0b0000000001111111;
+
+                            int reg = 0;
+                            reg = inst[1][1] - 48;
+                            valor |= reg << 10;
+                            valor &= 0b001100000000;
+
+                            valor |= 0b01001 << 11;
                             printf("%x\n", valor);
                         }
                     }
@@ -285,12 +363,12 @@ void decode(void)
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -298,6 +376,26 @@ void decode(void)
                             valor &= 0b001111000000;
 
                             valor |= 0b01110 << 11;
+                            printf("%x\n", valor);
+                        }
+                        else if (inst[3][0] == 'R')
+                        {
+                            int reg1 = 0;
+                            reg1 = inst[1][1] - 48;
+                            valor |= reg1 << 0;
+                            valor &= 0b0000000000000111;
+
+                            int reg2 = 0;
+                            reg2 = inst[2][1] - 48;
+                            valor |= reg2 << 3;
+                            valor &= 0b0000000000111111;
+
+                            int reg3 = 0;
+                            reg3 = inst[3][1] - 48;
+                            valor |= reg3 << 6;
+                            valor &= 0b0000000111111111;
+
+                            valor |= 0b0101010 << 9;
                             printf("%x\n", valor);
                         }
                     }
@@ -314,12 +412,12 @@ void decode(void)
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -343,12 +441,12 @@ void decode(void)
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -356,6 +454,26 @@ void decode(void)
                             valor &= 0b001111000000;
 
                             valor |= 0b10000 << 11;
+                            printf("%x\n", valor);
+                        }
+                        else if (inst[3][0] == 'R')
+                        {
+                            int reg1 = 0;
+                            reg1 = inst[1][1] - 48;
+                            valor |= reg1 << 0;
+                            valor &= 0b0000000000000111;
+
+                            int reg2 = 0;
+                            reg2 = inst[2][1] - 48;
+                            valor |= reg2 << 3;
+                            valor &= 0b0000000000111111;
+
+                            int reg3 = 0;
+                            reg3 = inst[3][1] - 48;
+                            valor |= reg3 << 6;
+                            valor &= 0b0000000111111111;
+
+                            valor |= 0b0101001 << 9;
                             printf("%x\n", valor);
                         }
                     }
@@ -372,12 +490,12 @@ void decode(void)
                             //rd
                             int reg = 0;
                             reg = inst[1][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 2;
                             valor &= 0b0011;
 
                             //rn
                             reg = inst[2][1] - 48;
-                            valor |= reg << 8;
+                            valor |= reg << 5;
                             valor &= 0b000011000;
 
                             inst[3][0] = '0';
@@ -385,29 +503,6 @@ void decode(void)
                             valor &= 0b001111000000;
 
                             valor |= 0b10001 << 11;
-                            printf("%x\n", valor);
-                        }
-                    }
-                }
-            }
-            else if (inst[0] == "LDR") //linha 19
-            {
-                if (inst[1][0] == 'R')
-                {
-                    if (inst[2][0] == 'P')
-                    {
-                        if (inst[3][0] == '#')
-                        {
-                            inst[2][0] = '0';
-                            istringstream(inst[2]) >> valor;
-                            valor &= 0b0000000001111111;
-
-                            int reg = 0;
-                            reg = inst[1][1] - 48;
-                            valor |= reg << 8;
-                            valor &= 0b001100000000;
-
-                            valor |= 0b01001 << 11;
                             printf("%x\n", valor);
                         }
                     }
@@ -441,94 +536,6 @@ void decode(void)
 
                     valor |= 0b010001111 << 7;
                     printf("%x\n", valor);
-                }
-            }
-            else if (inst[0] == "STR")
-            { //Linha 20 da tabela opção 00
-                if (inst[1][0] == 'R')
-                {
-                    if (inst[2][0] == 'R')
-                    {
-                        if (inst[3][0] == 'R')
-                        {
-                            int reg1 = 0;
-                            reg1 = inst[1][1] - 48;
-                            valor |= reg1 << 0;
-                            valor &= 0b0000000000000111;
-
-                            int reg2 = 0;
-                            reg2 = inst[2][1] - 48;
-                            valor |= reg2 << 3;
-                            valor &= 0b0000000000111111;
-
-                            int reg3 = 0;
-                            reg3 = inst[3][1] - 48;
-                            valor |= reg3 << 6;
-                            valor &= 0b0000000111111111;
-
-                            //colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
-                            valor |= 0b0101000 << 9;
-                            printf("%x\n", valor);
-                        }
-                    }
-                }
-            }
-            else if (inst[0] == "STRH")
-            { //Linha 20 da tabela opção 01
-                if (inst[1][0] == 'R')
-                {
-                    if (inst[2][0] == 'R')
-                    {
-                        if (inst[3][0] == 'R')
-                        {
-                            int reg1 = 0;
-                            reg1 = inst[1][1] - 48;
-                            valor |= reg1 << 0;
-                            valor &= 0b0000000000000111;
-
-                            int reg2 = 0;
-                            reg2 = inst[2][1] - 48;
-                            valor |= reg2 << 3;
-                            valor &= 0b0000000000111111;
-
-                            int reg3 = 0;
-                            reg3 = inst[3][1] - 48;
-                            valor |= reg3 << 6;
-                            valor &= 0b0000000111111111;
-
-                            valor |= 0b0101001 << 9;
-                            printf("%x\n", valor);
-                        }
-                    }
-                }
-            }
-            else if (inst[0] == "STRB")
-            { //Linha 20 da tabela opção 10
-                if (inst[1][0] == 'R')
-                {
-                    if (inst[2][0] == 'R')
-                    {
-                        if (inst[3][0] == 'R')
-                        {
-                            int reg1 = 0;
-                            reg1 = inst[1][1] - 48;
-                            valor |= reg1 << 0;
-                            valor &= 0b0000000000000111;
-
-                            int reg2 = 0;
-                            reg2 = inst[2][1] - 48;
-                            valor |= reg2 << 3;
-                            valor &= 0b0000000000111111;
-
-                            int reg3 = 0;
-                            reg3 = inst[3][1] - 48;
-                            valor |= reg3 << 6;
-                            valor &= 0b0000000111111111;
-
-                            valor |= 0b0101010 << 9;
-                            printf("%x\n", valor);
-                        }
-                    }
                 }
             }
             else if (inst[0] == "LDRSB")
@@ -762,26 +769,6 @@ void decode(void)
                     }
                 }
             }
-            else if (inst[0] == "CMP") //linha 9
-            {
-                if (inst[1][0] == 'R')
-                {
-                    if (inst[2][0] == 'R')
-                    {
-                        int reg = 0;
-                        reg = inst[1][1] - 48;
-                        valor |= reg << 5;
-                        valor &= 0b00011000;
-
-                        reg = inst[2][1] - 48;
-                        valor |= reg << 2;
-                        valor &= 0b0011;
-
-                        valor |= 0b010001010 << 6;
-                        printf("%x\n", valor);
-                    }
-                }
-            }
             else if (inst[0] == "CMN") //linha 9
             {
                 if (inst[1][0] == 'R')
@@ -902,6 +889,184 @@ void decode(void)
                     }
                 }
             }
+            else if (inst[0] == "SXTH") //linha 30
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011001000 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "SXTB") //linha 30
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011001001 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "UXTH") //linha 30
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011001010 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "UXTB") //linha 30
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011001011 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "REV") //linha 31
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011101000 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "REV16") //linha 31
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011101001 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "REVSH") //linha 31
+            {
+                if (inst[1][0] == 'R')
+                {
+                    if (inst[2][0] == 'R')
+                    {
+                        int reg = 0;
+                        reg = inst[1][1] - 48;
+                        valor |= reg << 2;
+                        valor &= 0b0011;
+
+                        reg = inst[2][1] - 48;
+                        valor |= reg << 5;
+                        valor &= 0b00011000;
+
+                        valor |= 0b1011101010 << 6;
+                        printf("%x\n", valor);
+                    }
+                }
+            }
+            else if (inst[0] == "SETEND LE") //linha 33
+            {
+                valor |= 0b1011011001010000 << 0;
+                printf("%x\n", valor);
+            }
+            else if (inst[0] == "SETEND BE") //linha 33
+            {
+                valor |= 0b1011011001011000 << 0;
+                printf("%x\n", valor);
+            }
+            else if (inst[0] == "BKPT") //linha 35
+            {
+                if (inst[1][0] == '#')
+                {
+                    inst[1][0] = '0';
+                    istringstream(inst[1]) >> valor;
+                    valor &= 0b01111111;
+
+                    valor |= 0b10111110 << 8;
+                    printf("%x\n", valor);
+                }
+            }
+            else if (inst[0] == "SWI") //linha 35
+            {
+                if (inst[1][0] == '#')
+                {
+                    inst[1][0] = '0';
+                    istringstream(inst[1]) >> valor;
+                    valor &= 0b01111111;
+
+                    valor |= 0b11011111 << 8;
+                    printf("%x\n", valor);
+                }
+            }
+
+            // problemas p/ identificar as instruções (reg alto e/ou baixo)
+            // corrigir
+            /* 
             else if (inst[0] == "ADD") //linha 12
             {
                 if (inst[1][0] == 'R')
@@ -1022,6 +1187,8 @@ void decode(void)
                     }
                 }
             }
+            */
+            /*
             else if (inst[0] == "CMP") //linha 15
             {
                 if (inst[1][0] == 'R')
@@ -1082,6 +1249,7 @@ void decode(void)
                     }
                 }
             }
+            */
         }
     }
     in.close();
