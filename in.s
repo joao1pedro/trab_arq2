@@ -16,3 +16,6 @@ cmn r1, r2
 tst r7, r8
 bic r0, r1
 mvn r1, r4
+add r0, r1, r3
+sub r0, #1
+add r7, sp, #2
