@@ -41,7 +41,7 @@ void decode(void)
     int ld = 0;
     int lm = 0;
 
-    freopen("output.txt", "w", stdout);
+    freopen("output.out", "w", stdout);
 
     if (in.is_open())
     {
@@ -1523,6 +1523,11 @@ void decode(void)
                 valor = 0;
                 valor |= 0b1011011001110111;
                 printf("%x\n", valor);
+            }
+            else
+            {
+                valor = 0xffff;
+                printf("%x - instrução inválida", valor);
             }
         }
     }
