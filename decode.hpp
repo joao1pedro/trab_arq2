@@ -15,8 +15,7 @@ using namespace std;
 
 void decode(void);
 
-int ld = 0;
-int lm = 0;
+
 
 // for string delimiter
 vector<string> split(string s, string delimiter)
@@ -40,8 +39,9 @@ void decode(void)
 {
     string line;
     ifstream in("in.s");
-
-    short valor = 0;
+    unsigned short valor = 0;
+    int ld = 0;
+    int lm = 0;
 
     freopen("output.txt", "w", stdout);
 
@@ -1023,11 +1023,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100000000 << 6;
@@ -1043,11 +1043,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100000001 << 6;
@@ -1063,11 +1063,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100000101 << 6;
@@ -1083,11 +1083,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100000110 << 6;
@@ -1103,11 +1103,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100000111 << 6;
@@ -1123,11 +1123,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001000 << 6;
@@ -1143,11 +1143,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001001 << 6;
@@ -1163,11 +1163,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001011 << 6;
@@ -1183,11 +1183,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001100 << 6;
@@ -1203,11 +1203,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001101 << 6;
@@ -1223,11 +1223,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001110 << 6;
@@ -1243,11 +1243,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 0;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 3;
                         valor &= 0b00011000;
 
                         valor |= 0b0100001111 << 6;
@@ -1263,11 +1263,11 @@ void decode(void)
                     {
                         int reg = 0;
                         reg = inst[1][1] - 48;
-                        valor |= reg << 2;
+                        valor |= reg << 3;
                         valor &= 0b0011;
 
                         reg = inst[2][1] - 48;
-                        valor |= reg << 5;
+                        valor |= reg << 0;
                         valor &= 0b00011000;
 
                         valor |= 0b0100011000 << 6;
@@ -1472,6 +1472,14 @@ void decode(void)
                     }
                 }
             }
+            else if (inst[0] == "B") //identifica a instrução mov na string 0(primeira string)
+            {
+            if (inst[1][0] == '.'){ //identifica o registrador que está na posição [1][0] da segunda string e posição 
+                    valor = 0xfee7; //preenche os demais campos com a opcao da instrução, esse campo deve ser preenchido de 11 a 15 como diz a tabela
+                    printf("%x\n", valor);
+                    return;
+            }
+        }
         }
     }
     in.close();
