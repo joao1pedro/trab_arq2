@@ -35,7 +35,7 @@ void decode(void)
     string line;
     ifstream in("in.s");
 
-    short valor = 0;
+    unsigned short valor = 0;
 
     if (in.is_open())
     {
@@ -669,6 +669,7 @@ void decode(void)
                     }
                 }
             }
+            //
             else if (inst[0] == "ADC") //linha 8
             {
                 if (inst[1][0] == 'R')
@@ -889,6 +890,7 @@ void decode(void)
                     }
                 }
             }
+            //
             else if (inst[0] == "SXTH") //linha 30
             {
                 if (inst[1][0] == 'R')
