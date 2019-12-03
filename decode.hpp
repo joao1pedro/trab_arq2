@@ -65,12 +65,13 @@ void decode(void)
                         int reg1 = inst[1][1] - 48;
                         valor |= reg1 << 8;
                         valor &= 0b0000011111111111;
+
                         //colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
                         valor |= 0b00100 << 11;
                         printf("%x\n", valor);
                     }
                     else if (inst[2][0] == 'R')
-                    { //Linha ? da tabela
+                    {
                         valor = 0;
                         int ld = 0;
                         inst[1][0] = '0';
@@ -1480,6 +1481,48 @@ void decode(void)
                     valor |= 0b11011110 << 8;
                     printf("%x\n", valor);
                 }
+            }
+            else if (inst[0] == "PUSH")
+            {
+                //valor = 0;
+                if (inst[1][0] == 'R' || inst[1] == "SP" || inst[1] == "LR" || inst[1] == "PC")
+                {
+                    int reg = 0;
+                    reg = inst[1][1] - 48;
+                    valor |= reg;
+                    valor &= 0b0000000011111111;
+
+                    //Com o bit R = 1
+                    valor |= 0b10110101 << 8;
+                    printf("%x\n", valor);
+                }
+            }
+            else if (inst[0] == "POP")
+            {
+                //valor = 0;
+                if (inst[1][0] == 'R' || inst[1] == "SP" || inst[1] == "LR" || inst[1] == "PC")
+                {
+                    int reg = 0;
+                    reg = inst[1][1] - 48;
+                    valor |= reg;
+                    valor &= 0b0000000011111111;
+
+                    //Com o bit R = 1
+                    valor |= 0b10111101 << 8;
+                    printf("%x\n", valor);
+                }
+            }
+            else if (inst[0] == "CPSIE")
+            {
+                valor = 0;
+                valor |= 0b1011011001100111;
+                printf("%x\n", valor);
+            }
+            else if (inst[0] == "CPSID")
+            {
+                valor = 0;
+                valor |= 0b1011011001110111;
+                printf("%x\n", valor);
             }
         }
     }

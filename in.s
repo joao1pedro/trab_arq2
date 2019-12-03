@@ -8,3 +8,6 @@ and r2, r7
 mvn r5, r3
 bic r2, r4
 tst r6, r1
+cpsie i
+push r2
+pop r2
