@@ -15,8 +15,6 @@ using namespace std;
 
 void decode(void);
 
-
-
 // for string delimiter
 vector<string> split(string s, string delimiter)
 {
@@ -74,11 +72,11 @@ void decode(void)
                     else if (inst[2][0] == 'R')
                     { //Linha ? da tabela
                         valor = 0;
-                        //int ld = 0;
+                        int ld = 0;
                         inst[1][0] = '0';
                         istringstream(inst[1]) >> ld;
 
-                        //int lm = 0;
+                        int lm = 0;
                         inst[2][0] = '0';
                         istringstream(inst[2]) >> lm;
 
@@ -89,7 +87,7 @@ void decode(void)
                                 valor |= ld;
                                 valor &= 0b0000000000000111;
 
-                                lm = lm &= 0b0111;
+                                lm &= 0b0111;
                                 valor |= lm << 3;
                                 valor &= 0b0000000000111111;
 
@@ -99,7 +97,7 @@ void decode(void)
                         }
                         else if (lm < 7)
                         { //registrador de destino é Hd e o de origem é lm
-                            ld = ld &= 0b0111;
+                            ld &= 0b0111;
                             valor |= ld; //0000000000000011
                             valor &= 0b0000000000000111;
 
@@ -111,11 +109,11 @@ void decode(void)
                         }
                         else
                         { //registrador de destino é Hd e o de origem é Hm
-                            ld = ld &= 0b0111;
+                            ld &= 0b0111;
                             valor |= ld; //0000000000000011
                             valor &= 0b0000000000000111;
 
-                            lm = lm &= 0b0111;
+                            lm &= 0b0111;
                             valor |= lm << 3;
                             valor &= 0b0000000000111111;
 
@@ -226,10 +224,7 @@ void decode(void)
                     {
                         inst[2][0] = '0';
                         //cout << inst[2] << endl;
-                        istringstream(inst[2]) >> aux;
-
-                        aux = aux >> 2; //Divide imediato por 4
-                        valor |= aux;   //Coloca o imediato no short valor
+                        istringstream(inst[2]) >> valor;
                         valor &= 0b0000000001111111;
 
                         valor |= 0b101100000 << 7;
@@ -243,9 +238,7 @@ void decode(void)
                         if (inst[3][0] == '#')
                         {
                             inst[3][0] = '0';
-                            istringstream(inst[3]) >> aux;
-                            aux = aux >> 2;
-                            valor |= aux;
+                            istringstream(inst[3]) >> valor;
                             valor &= 0b0000000011111111;
 
                             int reg1 = 0;
@@ -262,10 +255,7 @@ void decode(void)
                         if (inst[3][0] == '#')
                         {
                             inst[3][0] = '0';
-                            unsigned short aux = 0;
-                            istringstream(inst[3]) >> aux;
-                            aux = aux >> 2;
-                            valor |= aux;
+                            istringstream(inst[3]) >> valor;
                             valor &= 0b0000000011111111;
 
                             int reg1 = 0;
@@ -297,11 +287,11 @@ void decode(void)
                         {
                             //Linha ? da tabela
                             valor = 0;
-                            //int ld = 0;
+                            int ld = 0;
                             inst[1][0] = '0';
                             istringstream(inst[1]) >> ld;
 
-                            //int lm = 0;
+                            int lm = 0;
                             inst[2][0] = '0';
                             istringstream(inst[2]) >> lm;
 
@@ -313,7 +303,7 @@ void decode(void)
                                     valor |= ld;
                                     valor &= 0b0000000000000111;
 
-                                    lm = lm &= 0b0111;
+                                    lm &= 0b0111;
                                     valor |= lm << 3;
                                     valor &= 0b0000000000111111;
 
@@ -323,7 +313,7 @@ void decode(void)
                             }
                             else if (lm < 7)
                             { //registrador de destino é Hd e o de origem é lm
-                                ld = ld &= 0b0111;
+                                ld &= 0b0111;
                                 valor |= ld; //0000000000000011
                                 valor &= 0b0000000000000111;
 
@@ -335,11 +325,11 @@ void decode(void)
                             }
                             else
                             { //registrador de destino é Hd e o de origem é Hm
-                                ld = ld &= 0b0111;
+                                ld &= 0b0111;
                                 valor |= ld; //0000000000000011
                                 valor &= 0b0000000000000111;
 
-                                lm = lm &= 0b0111;
+                                lm &= 0b0111;
                                 valor |= lm << 3;
                                 valor &= 0b0000000000111111;
 
@@ -395,17 +385,13 @@ void decode(void)
             else if (inst[0] == "SUB")
             { //linha 3,4 e 6 da tabela
                 valor = 0;
-                unsigned short aux = 0;
                 if (inst[1] == "SP,")
                 {
                     if (inst[2][0] == '#')
                     {
                         inst[2][0] = '0';
                         //cout << inst[2] << endl;
-                        istringstream(inst[2]) >> aux;
-
-                        aux = aux >> 2; //Divide imediato por 4
-                        valor |= aux;   //Coloca o imediato no short valor
+                        istringstream(inst[2]) >> valor;
                         valor &= 0b0000000001111111;
 
                         valor |= 0b101100001 << 7;
@@ -459,7 +445,7 @@ void decode(void)
                         { //linha 4(opcao 1) da tabela
                             inst[3][0] = '0';
                             istringstream(inst[3]) >> valor;
-                            valor = valor << 6;
+                            valor << 6;
                             valor &= 0b0000000111000000;
 
                             int reg1 = 0;
@@ -506,7 +492,7 @@ void decode(void)
                             printf("%x\n", valor);
                         }
                         else
-                        {//linha 8
+                        { //linha 8
                             int reg = 0;
                             reg = inst[1][1] - 48;
                             valor |= reg << 5;
@@ -610,37 +596,19 @@ void decode(void)
                     }
                 }
             }
-            else if (inst[0] == "STR") //linha 22
-            {
+            else if (inst[0] == "STR")
+            { //linhas 20, 22 e 25
+                valor = 0;
                 if (inst[1][0] == 'R')
                 {
                     if (inst[2][0] == 'R')
-                    { //identificou a instrução ASR da 5º linha da tabela
-                        if (inst[3][0] == '#')
+                    {
+                        if (inst[3][0] == 'R')
                         {
-                            //rd
-                            int reg = 0;
-                            reg = inst[1][1] - 48;
-                            valor |= reg << 2;
-                            valor &= 0b0011;
 
-                            //rn
-                            reg = inst[2][1] - 48;
-                            valor |= reg << 5;
-                            valor &= 0b000011000;
-
-                            inst[3][0] = '0';
-                            istringstream(inst[3]) >> valor;
-                            valor &= 0b001111000000;
-
-                            valor |= 0b01100 << 11;
-                            printf("%x\n", valor);
-                        }
-                        else if (inst[3][0] == 'R')
-                        {
                             int reg1 = 0;
                             reg1 = inst[1][1] - 48;
-                            valor |= reg1 << 0;
+                            valor |= reg1;
                             valor &= 0b0000000000000111;
 
                             int reg2 = 0;
@@ -653,15 +621,45 @@ void decode(void)
                             valor |= reg3 << 6;
                             valor &= 0b0000000111111111;
 
-                            //colocando o restante dos bits com o op(0) já que é a primeira instrução da linha
                             valor |= 0b0101000 << 9;
                             printf("%x\n", valor);
                         }
                     }
                     else if (inst[2][0] == '[')
                     {
-                        if (inst[3][0] == '#')
-                        {
+                        if (inst[2][1] == 'R')
+                        { //linha 22
+                            if (inst[3][0] == '#')
+                            {
+                                int n = inst[3].size();
+
+                                inst[3][0] = '0';
+                                for (int i = n - 1; i > 0; i--)
+                                {
+                                    inst[3][i] = inst[3][i - 1];
+                                }
+
+                                (istringstream(inst[3])) >> valor; //coloca imediato dentro do short
+                                valor = valor << 6;                //move 6 posições para esquerda
+                                cout << valor << endl;
+                                valor &= 0b0000011111000000;
+
+                                int ld = 0;
+                                ld = inst[1][1] - 48;
+                                valor |= ld;
+                                valor &= 0b0000011111000111;
+
+                                int ln = 0;
+                                ln = inst[2][2] - 48;
+                                valor |= ld << 3;
+                                valor &= 0b0000011111111111;
+
+                                valor |= 0b01100 << 11;
+                                printf("%x\n", valor);
+                            }
+                        }
+                        else if (inst[3][0] == '#' && inst[2][1] == 'S')
+                        { //linha 25
                             int n = (inst[3].size());
                             if (inst[3][n - 1] == ']')
                             {
@@ -683,13 +681,6 @@ void decode(void)
 
                                 valor &= 0b0000011111111111;
                                 valor |= 0b10010 << 11;
-                                //cout << valor << endl;
-
-                                unsigned short aux = valor;
-                                aux &= 0b0000000011111111;
-                                aux = aux >> 2;
-                                valor &= 0b1111111100000000;
-                                valor |= aux;
                                 printf("%x\n", valor);
                             }
                         }
@@ -697,7 +688,7 @@ void decode(void)
                 }
             }
             else if (inst[0] == "LDR")
-            { //linha 25
+            { //linhas 19, 22, 25
                 valor = 0;
                 if (inst[1][0] == 'R')
                 {
@@ -728,12 +719,6 @@ void decode(void)
                                 valor &= 0b0000011111111111;
                                 valor |= 0b10011 << 11;
                                 //cout << valor << endl;
-
-                                unsigned short aux = valor;
-                                aux &= 0b0000000011111111;
-                                aux = aux >> 2;
-                                valor &= 0b1111111100000000;
-                                valor |= aux;
                                 printf("%x\n", valor);
                             }
                         }
@@ -764,37 +749,42 @@ void decode(void)
                                 valor &= 0b0000011111111111;
                                 valor |= 0b01001 << 11;
                                 //cout << valor << endl;
-
-                                unsigned short aux = valor;
-                                aux &= 0b0000000011111111;
-                                aux = aux >> 2;
-                                valor &= 0b1111111100000000;
-                                valor |= aux;
                                 printf("%x\n", valor);
                             }
                         }
                     }
-                    else if (inst[2][0] == 'R')
+                    else if (inst[2][0] == '[' && inst[2][1] == 'R')
                     {
                         if (inst[3][0] == '#')
                         {
-                            //rd
-                            int reg = 0;
-                            reg = inst[1][1] - 48;
-                            valor |= reg << 2;
-                            valor &= 0b0011;
+                            int n = (inst[3].size());
+                            if (inst[3][n - 1] == ']')
+                            {
+                                inst[3][0] = '0';
+                                for (int i = n - 1; i > 0; i--)
+                                {
+                                    inst[3][i] = inst[3][i - 1];
+                                }
+                                //cout << inst[3];
+                                istringstream(inst[3]) >> valor;
+                                valor = valor << 6;
+                                valor &= 0b0000011111000000;
+                                //cout << valor << endl;
 
-                            //rn
-                            reg = inst[2][1] - 48;
-                            valor |= reg << 5;
-                            valor &= 0b000011000;
+                                int reg1 = 0;
+                                reg1 = inst[1][1] - 48;
+                                valor |= reg1;
+                                valor &= 0b0000011111000111;
+                                //cout << valor << endl;
 
-                            inst[3][0] = '0';
-                            istringstream(inst[3]) >> valor;
-                            valor &= 0b001111000000;
+                                int reg2 = 0;
+                                reg2 = inst[2][2] - 48;
+                                valor |= reg2 << 3;
+                                valor &= 0b0000011111111111;
 
-                            valor |= 0b01101 << 11;
-                            printf("%x\n", valor);
+                                valor |= 0b01101 << 11;
+                                printf("%x\n", valor);
+                            }
                         }
                     }
                 }
@@ -1474,12 +1464,23 @@ void decode(void)
             }
             else if (inst[0] == "B") //identifica a instrução mov na string 0(primeira string)
             {
-            if (inst[1][0] == '.'){ //identifica o registrador que está na posição [1][0] da segunda string e posição 
-                    valor = 0xfee7; //preenche os demais campos com a opcao da instrução, esse campo deve ser preenchido de 11 a 15 como diz a tabela
+                if (inst[1][0] == '.')
+                {
+
+                    valor = 0xfee7;
                     printf("%x\n", valor);
                     return;
+                }
+                else
+                {
+                    inst[1][0] = '0';
+                    istringstream(inst[1]) >> valor;
+                    valor &= 0b01111111;
+
+                    valor |= 0b11011110 << 8;
+                    printf("%x\n", valor);
+                }
             }
-        }
         }
     }
     in.close();
