@@ -669,7 +669,6 @@ void decode(void)
                     }
                 }
             }
-            //
             else if (inst[0] == "ADC") //linha 8
             {
                 if (inst[1][0] == 'R')
@@ -890,7 +889,6 @@ void decode(void)
                     }
                 }
             }
-            //
             else if (inst[0] == "SXTH") //linha 30
             {
                 if (inst[1][0] == 'R')
@@ -937,15 +935,17 @@ void decode(void)
                 {
                     if (inst[2][0] == 'R')
                     {
-                        int reg = 0;
-                        reg = inst[1][1] - 48;
-                        valor |= reg << 2;
-                        valor &= 0b0011;
+                        valor = 0;
+                        int reg1 = 0;
+                        reg1 = inst[1][1] - 48;
+                        valor |= reg1;
+                        valor &= 0b0000000000000111; 
 
-                        reg = inst[2][1] - 48;
-                        valor |= reg << 5;
-                        valor &= 0b00011000;
-
+                        int reg2 = 0;
+                        reg2 = inst[2][1] - 48;
+                        valor |= reg2 << 3;
+                        valor &= 0b0000000000111111; 
+                        
                         valor |= 0b1011001010 << 6;
                         printf("%x\n", valor);
                     }
@@ -977,17 +977,22 @@ void decode(void)
                 {
                     if (inst[2][0] == 'R')
                     {
-                        int reg = 0;
-                        reg = inst[1][1] - 48;
-                        valor |= reg << 2;
-                        valor &= 0b0011;
+                        valor = 0;
+                        int reg1 = 0;
+                        reg1 = inst[1][1] - 48;
+                        //cout << reg1 << endl;
+                        //cout << valor << " " << reg1 << endl;
+                        valor |= reg1;
+                        valor &= 0b0000000000000111;
 
-                        reg = inst[2][1] - 48;
-                        valor |= reg << 5;
-                        valor &= 0b00011000;
+                        int reg2 = 0;
+                        reg2 = inst[2][1] - 48;
+                        valor |= reg2 << 3;
+                        valor &= 0b0000000000111111; 
 
                         valor |= 0b1011101000 << 6;
                         printf("%x\n", valor);
+
                     }
                 }
             }
@@ -997,14 +1002,16 @@ void decode(void)
                 {
                     if (inst[2][0] == 'R')
                     {
-                        int reg = 0;
-                        reg = inst[1][1] - 48;
-                        valor |= reg << 2;
-                        valor &= 0b0011;
+                        valor=0;
+                        int reg1 = 0;
+                        reg1 = inst[1][1] - 48;
+                        valor |= reg1;
+                        valor &= 0b0000000000000111;
 
-                        reg = inst[2][1] - 48;
-                        valor |= reg << 5;
-                        valor &= 0b00011000;
+                        int reg2 = 0;
+                        reg2 = inst[2][1] - 48;
+                        valor |= reg2 << 3;
+                        valor &= 0b0000000000111111; 
 
                         valor |= 0b1011101001 << 6;
                         printf("%x\n", valor);
@@ -1017,28 +1024,32 @@ void decode(void)
                 {
                     if (inst[2][0] == 'R')
                     {
-                        int reg = 0;
-                        reg = inst[1][1] - 48;
-                        valor |= reg << 2;
-                        valor &= 0b0011;
+                        valor=0;
+                        int reg1 = 0;
+                        reg1 = inst[1][1] - 48;
+                        valor |= reg1;
+                        valor &= 0b0000000000000111;
 
-                        reg = inst[2][1] - 48;
-                        valor |= reg << 5;
-                        valor &= 0b00011000;
+                        int reg2 = 0;
+                        reg2 = inst[2][1] - 48;
+                        valor |= reg2 << 3;
+                        valor &= 0b0000000000111111; 
 
-                        valor |= 0b1011101010 << 6;
+                        valor |= 0b1011101011 << 6;
                         printf("%x\n", valor);
                     }
                 }
             }
-            else if (inst[0] == "SETEND LE") //linha 33
+            else if (inst[0] == "SETEND" && inst[1] == "LE") //linha 33
             {
-                valor |= 0b1011011001010000 << 0;
+                valor = 0;
+                valor |= 0b1011011001010000;
                 printf("%x\n", valor);
             }
-            else if (inst[0] == "SETEND BE") //linha 33
+            else if (inst[0] == "SETEND" && inst[1] == "BE") //linha 33
             {
-                valor |= 0b1011011001011000 << 0;
+                valor = 0;
+                valor |= 0b1011011001011000;
                 printf("%x\n", valor);
             }
             else if (inst[0] == "BKPT") //linha 35
@@ -1057,11 +1068,12 @@ void decode(void)
             {
                 if (inst[1][0] == '#')
                 {
+                    valor = 0;
                     inst[1][0] = '0';
                     istringstream(inst[1]) >> valor;
-                    valor &= 0b01111111;
-
-                    valor |= 0b11011111 << 8;
+                    valor &= 0b0000000011111111;
+                    cout << valor << endl;
+                    valor |= 0b1101111100000000;
                     printf("%x\n", valor);
                 }
             }
@@ -1079,11 +1091,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010001 << 6;
                         printf("%x\n", valor);
                     }
@@ -1099,11 +1109,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100011001 << 6;
                         printf("%x\n", valor);
                     }
@@ -1119,11 +1127,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010010 << 6;
                         printf("%x\n", valor);
                     }
@@ -1139,11 +1145,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100011010 << 6;
                         printf("%x\n", valor);
                     }
@@ -1159,11 +1163,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010011 << 6;
                         printf("%x\n", valor);
                     }
@@ -1179,11 +1181,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100011011 << 6;
                         printf("%x\n", valor);
                     }
@@ -1201,11 +1201,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010101 << 6;
                         printf("%x\n", valor);
                     }
@@ -1221,11 +1219,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010110 << 6;
                         printf("%x\n", valor);
                     }
@@ -1241,11 +1237,9 @@ void decode(void)
                         reg = inst[1][1] - 48;
                         valor |= reg << 5;
                         valor &= 0b00011000;
-
                         reg = inst[2][1] - 48;
                         valor |= reg << 2;
                         valor &= 0b0011;
-
                         valor |= 0b0100010111 << 6;
                         printf("%x\n", valor);
                     }
@@ -1262,3 +1256,4 @@ int main()
     decode();
     return 0;
 }
+

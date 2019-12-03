@@ -13,3 +13,5 @@ uxtb r1, r2
 uxth r1, r2
 sxtb r1, r0
 sxth r4, r7
+setend le
+setend be
